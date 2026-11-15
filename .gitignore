@@ -1,0 +1,17 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Données locales générées
+data/history.json
+
+# OS / éditeurs
+.DS_Store
+.vscode/
+.idea/
