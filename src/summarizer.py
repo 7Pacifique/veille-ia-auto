@@ -1,8 +1,12 @@
 """
 summarizer.py
 -------------
-Utilise l'API Anthropic (Claude) pour sélectionner et résumer
+Utilise l'API Groq (gratuite, modèles Llama) pour sélectionner et résumer
 les actualités les plus marquantes à partir d'une liste brute.
+
+Groq est utilisé ici car il offre un accès gratuit généreux, sans carte
+bancaire requise, via des modèles open-source rapides (Llama 3.3).
+Clé API : https://console.groq.com/keys
 """
 
 from __future__ import annotations
@@ -10,11 +14,12 @@ from __future__ import annotations
 import json
 import os
 
-import anthropic
+from groq import Groq
 
 from .news_fetcher import NewsItem
 
-MODEL = "claude-sonnet-4-5"  # modèle Claude utilisé pour le résumé
+MODEL = "openai/gpt-oss-120b"  # modèle Groq utilisé pour le résumé (gratuit)
+MAX_OUTPUT_TOKENS = 6000  # reste sous la limite du modèle (8000) avec de la marge
 
 
 SYSTEM_PROMPT = """Tu es un assistant de veille médiatique.
@@ -32,7 +37,7 @@ Aucun texte avant ou après le JSON."""
 
 def summarize_news(items: list[NewsItem], topic: str, max_items: int = 15) -> list[dict]:
     """
-    Envoie les actus brutes à Claude pour sélection + résumé.
+    Envoie les actus brutes à Groq (Llama 3.3) pour sélection + résumé.
 
     Args:
         items: Liste des actus brutes (NewsItem).
@@ -44,22 +49,23 @@ def summarize_news(items: list[NewsItem], topic: str, max_items: int = 15) -> li
         transmise au générateur de présentation.
 
     Raises:
-        RuntimeError: si la clé API Anthropic n'est pas configurée.
+        RuntimeError: si la clé API Groq n'est pas configurée, ou si la
+            réponse du modèle n'est pas un JSON exploitable.
     """
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise RuntimeError(
-            "ANTHROPIC_API_KEY manquante. Ajoute-la dans ton fichier .env "
-            "(voir .env.example). Clé disponible sur https://console.anthropic.com/"
+            "GROQ_API_KEY manquante. Ajoute-la dans ton fichier .env "
+            "(voir .env.example). Clé gratuite disponible sur https://console.groq.com/keys"
         )
 
     if not items:
         return []
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client = Groq(api_key=api_key)
 
     raw_list = "\n\n".join(
-        f"- Titre : {item.title}\n  Source : {item.source}\n  Extrait : {item.summary[:300]}"
+        f"- Titre : {item.title}\n  Source : {item.source}\n  Extrait : {item.summary[:150]}"
         for item in items
     )
 
@@ -69,14 +75,16 @@ def summarize_news(items: list[NewsItem], topic: str, max_items: int = 15) -> li
         f"Voici les actualités brutes collectées :\n\n{raw_list}"
     )
 
-    response = client.messages.create(
+    response = client.chat.completions.create(
         model=MODEL,
-        max_tokens=4000,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_prompt}],
+        max_tokens=MAX_OUTPUT_TOKENS,
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
     )
 
-    text = response.content[0].text.strip()
+    text = response.choices[0].message.content.strip()
 
     # Nettoyage au cas où le modèle entoure le JSON de balises markdown
     if text.startswith("```"):
@@ -89,7 +97,7 @@ def summarize_news(items: list[NewsItem], topic: str, max_items: int = 15) -> li
         result = json.loads(text)
     except json.JSONDecodeError as exc:
         raise RuntimeError(
-            f"Réponse de Claude non-JSON, impossible de parser le résumé : {exc}\n"
+            f"Réponse de Groq non-JSON, impossible de parser le résumé : {exc}\n"
             f"Réponse brute : {text[:500]}"
         ) from exc
 
