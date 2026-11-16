@@ -6,7 +6,7 @@ Point d'entrée : lance une veille complète sur un sujet donné.
 
 Pipeline :
   1. Récupère les actus des dernières 24h (Google News RSS, sans clé API)
-  2. Sélectionne et résume les plus marquantes via Claude (API Anthropic)
+  2. Sélectionne et résume les plus marquantes via GROQ (API GROQ)
   3. Génère une présentation via l'API Gamma
   4. Journalise le résultat dans l'historique local (data/history.json)
 
@@ -56,7 +56,7 @@ def main() -> int:
 
     print(f"   → {len(raw_items)} actus brutes récupérées.")
 
-    print("🧠 Sélection et résumé via Claude...")
+    print("🧠 Sélection et résumé via GROQ...")
     try:
         summarized = summarize_news(raw_items, topic=args.topic, max_items=args.max)
     except RuntimeError as exc:
