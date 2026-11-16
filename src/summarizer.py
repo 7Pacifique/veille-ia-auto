@@ -1,11 +1,11 @@
 """
 summarizer.py
 -------------
-Utilise l'API Groq (gratuite, modèles Llama) pour sélectionner et résumer
+Utilise l'API Groq (gratuite, modèles OpenAi) pour sélectionner et résumer
 les actualités les plus marquantes à partir d'une liste brute.
 
 Groq est utilisé ici car il offre un accès gratuit généreux, sans carte
-bancaire requise, via des modèles open-source rapides (Llama 3.3).
+bancaire requise, via des modèles open-source rapides (OpenAi).
 Clé API : https://console.groq.com/keys
 """
 
@@ -37,7 +37,7 @@ Aucun texte avant ou après le JSON."""
 
 def summarize_news(items: list[NewsItem], topic: str, max_items: int = 15) -> list[dict]:
     """
-    Envoie les actus brutes à Groq (Llama 3.3) pour sélection + résumé.
+    Envoie les actus brutes à Groq (OpenAi) pour sélection + résumé.
 
     Args:
         items: Liste des actus brutes (NewsItem).
