@@ -5,13 +5,13 @@ Automatise ta veille quotidienne : recherche les actualités les plus récentes 
 **Pipeline en 3 étapes :**
 
 ```
-[Recherche web RSS] → [Résumé & sélection via Groq (Llama 3.3)] → [Présentation générée par Gamma]
+[Recherche web RSS] → [Résumé & sélection via Groq (OpenAi] → [Présentation générée par Gamma]
 ```
 
 ## ✨ Fonctionnalités
 
 - 🔎 Récupère les actualités des dernières **24h** (configurable) sur n'importe quel sujet, via Google News RSS — **aucune clé API requise pour cette étape**
-- 🧠 Sélectionne et résume les actus les plus marquantes avec **Groq** (modèle Llama 3.3, accès gratuit sans carte bancaire) : titre clair, résumé en 2-3 phrases, source
+- 🧠 Sélectionne et résume les actus les plus marquantes avec **Groq** (modèle OpenAi, accès gratuit sans carte bancaire) : titre clair, résumé en 2-3 phrases, source
 - 🎨 Génère automatiquement une **présentation Gamma** : une slide de titre datée + une slide par actualité, style épuré
 - 📝 Garde un **historique local** (`data/history.json`) de toutes les veilles effectuées
 - 🔧 Plafond de sécurité configurable (15 actus max par défaut) pour éviter les présentations surchargées
@@ -58,7 +58,7 @@ python main.py "IA Afrique de l'Ouest" --hours 48 --max 10
 ```
 🔎 Recherche des actualités sur « intelligence artificielle Bénin » (dernières 24h)...
    → 12 actus brutes récupérées.
-🧠 Sélection et résumé via Groq (Llama 3.3)...
+🧠 Sélection et résumé via Groq (OpenAi)...
    → 7 actus retenues :
      1. Six pays d'Afrique de l'Ouest adoptent des lignes directrices communes sur l'IA (WeAreTechAfrica)
      2. Le Cyber Africa Forum 2026 s'ouvre à Cotonou (APAnews)
@@ -76,7 +76,7 @@ veille-ia-gamma/
 ├── main.py                 # Point d'entrée (CLI)
 ├── src/
 │   ├── news_fetcher.py     # Récupération des actus (Google News RSS)
-│   ├── summarizer.py        # Sélection + résumé via l'API Groq (Llama 3.3)
+│   ├── summarizer.py        # Sélection + résumé via l'API Groq (OpenAi)
 │   ├── gamma_client.py       # Génération de présentation via l'API Gamma
 │   └── history.py           # Journalisation locale de l'historique
 ├── data/
@@ -90,7 +90,7 @@ veille-ia-gamma/
 
 - **Python 3.10+**
 - [`feedparser`](https://pypi.org/project/feedparser/) — lecture des flux RSS Google News
-- [`groq`](https://pypi.org/project/groq/) — SDK officiel Groq (Llama 3.3) pour le résumé, gratuit
+- [`groq`](https://pypi.org/project/groq/) — SDK officiel Groq (OpenAi) pour le résumé, gratuit
 - [`requests`](https://pypi.org/project/requests/) — appels à l'API REST Gamma
 - [`python-dotenv`](https://pypi.org/project/python-dotenv/) — gestion des clés API locales
 
@@ -107,4 +107,4 @@ MIT — libre d'utilisation et de modification.
 
 ---
 
-Projet développé par **Pacifique**, dans le cadre de son travail sur [Prompt Art Director](https://github.com/<ton-username>) — direction artistique assistée par IA pour les créateurs et marques francophones d'Afrique.
+Projet développé par **[Pacifique ASSOCLÉ](https://github.com/7Pacifique)**, AI Software Builder.
