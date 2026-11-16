@@ -8,8 +8,11 @@ __pycache__/
 venv/
 *.egg-info/
 
-# Données locales générées
-data/history.json
+# Note : data/history.json N'EST PLUS ignoré — il est suivi par Git et
+# committé automatiquement par le workflow GitHub Actions (veille-quotidienne.yml),
+# qui repart d'un environnement vierge à chaque exécution et a besoin de le
+# persister entre deux runs. Si tu préfères un historique purement local,
+# retire-le du suivi Git et ajoute une ligne "data/history.json" ici à la place.
 
 # OS / éditeurs
 .DS_Store

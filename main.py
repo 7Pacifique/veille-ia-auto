@@ -6,9 +6,10 @@ Point d'entrée : lance une veille complète sur un sujet donné.
 
 Pipeline :
   1. Récupère les actus des dernières 24h (Google News RSS, sans clé API)
-  2. Sélectionne et résume les plus marquantes via GROQ (API GROQ)
+  2. Sélectionne et résume les plus marquantes via Groq (Llama / GPT-OSS)
   3. Génère une présentation via l'API Gamma
   4. Journalise le résultat dans l'historique local (data/history.json)
+  5. Envoie un email récapitulatif (optionnel, si EMAIL_* est configuré)
 
 Usage :
     python main.py "intelligence artificielle Bénin"
@@ -19,10 +20,12 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import date
 
 from dotenv import load_dotenv
 
 from src import history
+from src.emailer import send_veille_email
 from src.gamma_client import generate_presentation
 from src.news_fetcher import fetch_news
 from src.summarizer import summarize_news
@@ -56,7 +59,7 @@ def main() -> int:
 
     print(f"   → {len(raw_items)} actus brutes récupérées.")
 
-    print("🧠 Sélection et résumé via GROQ...")
+    print("🧠 Sélection et résumé via Groq...")
     try:
         summarized = summarize_news(raw_items, topic=args.topic, max_items=args.max)
     except RuntimeError as exc:
@@ -83,6 +86,19 @@ def main() -> int:
 
     history.add_entry(topic=args.topic, count=len(summarized), gamma_url=gamma_url)
     print("📝 Entrée ajoutée à l'historique (data/history.json)")
+
+    print("📧 Envoi de l'email récapitulatif...")
+    try:
+        send_veille_email(
+            topic=args.topic,
+            count=len(summarized),
+            gamma_url=gamma_url,
+            run_date=date.today().strftime("%d/%m/%Y"),
+        )
+        print("   → Email envoyé.")
+    except RuntimeError as exc:
+        # Non bloquant : la veille a réussi même si l'email échoue.
+        print(f"⚠️  Email non envoyé : {exc}")
 
     return 0
 
