@@ -60,7 +60,7 @@ def send_veille_email(
     subject = f"Veille {topic} – {run_date}"
 
     body = (
-        f"Bonjour,\n\n"
+        f"Bonjour Pacifique.,\n\n"
         f"Ta veille quotidienne sur « {topic} » est prête.\n\n"
         f"{count} actualité(s) retenue(s)\n"
         f"Présentation : {presentation_url}\n\n"
