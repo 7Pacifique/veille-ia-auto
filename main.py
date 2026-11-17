@@ -81,10 +81,10 @@ def main() -> int:
         print(f"[ERREUR] {exc}")
         return 1
 
-    presentation_url = result.get("gammaUrl", "")
+    presentation_url = result.get("slidesgptUrl", "")
     print(f"[OK] Présentation prête : {presentation_url}")
 
-    history.add_entry(topic=args.topic, count=len(summarized), gamma_url=presentation_url)
+    history.add_entry(topic=args.topic, count=len(summarized), slidesgpt_url=presentation_url)
     print("-> Entrée ajoutée à l'historique (data/history.json)")
 
     print("-> Envoi de l'email récapitulatif...")

@@ -50,7 +50,7 @@ def generate_presentation(
         today: Date à afficher sur la slide de titre (par défaut : aujourd'hui).
 
     Returns:
-        Dict avec "gammaUrl" (clé conservée pour compatibilité avec le reste
+        Dict avec "slidesgptUrl" (clé conservée pour compatibilité avec le reste
         du pipeline – contient le lien slidesgpt.com/presentation/{id},
         reconstruit à partir de l'identifiant renvoyé par l'API).
 
@@ -103,6 +103,6 @@ def generate_presentation(
     web_url = f"https://slidesgpt.com/presentation/{presentation_id}" if presentation_id else ""
 
     return {
-        "gammaUrl": web_url or embed_url,  # clé conservée pour compatibilité avec main.py / history.py
+        "slidesgptUrl": web_url or embed_url,  # clé conservée pour compatibilité avec main.py / history.py
         "presentationId": presentation_id,
     }
