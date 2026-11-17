@@ -82,11 +82,9 @@ def main() -> int:
         return 1
 
     presentation_url = result.get("gammaUrl", "")
-    embed_url = result.get("embedUrl", "")
-    download_url = result.get("downloadUrl", "")
     print(f"[OK] Présentation prête : {presentation_url}")
 
-    history.add_entry(topic=args.topic, count=len(summarized), slidesgpt_url=presentation_url)
+    history.add_entry(topic=args.topic, count=len(summarized), gamma_url=presentation_url)
     print("-> Entrée ajoutée à l'historique (data/history.json)")
 
     print("-> Envoi de l'email récapitulatif...")
@@ -96,8 +94,6 @@ def main() -> int:
             count=len(summarized),
             presentation_url=presentation_url,
             run_date=date.today().strftime("%d/%m/%Y"),
-            embed_url=embed_url,
-            download_url=download_url,
         )
         print("   -> Email envoyé.")
     except RuntimeError as exc:

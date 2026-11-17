@@ -51,12 +51,8 @@ def generate_presentation(
 
     Returns:
         Dict avec "gammaUrl" (clé conservée pour compatibilité avec le reste
-        du pipeline – contient le lien web slidesgpt.com/presentation/{id},
-        NON documenté par l'API et donc non garanti : il reconstruit l'URL
-        vue dans l'interface SlidesGPT une fois connecté, mais rien ne dit
-        qu'il reste valable hors session ou dans le temps), "embedUrl"
-        (lien officiel documenté, rendu via Microsoft PowerPoint Online) et
-        "downloadUrl" (lien de téléchargement PowerPoint direct, officiel).
+        du pipeline – contient le lien slidesgpt.com/presentation/{id},
+        reconstruit à partir de l'identifiant renvoyé par l'API).
 
     Raises:
         RuntimeError: si la clé API SlidesGPT est manquante, ou si la
@@ -102,13 +98,11 @@ def generate_presentation(
         raise RuntimeError(f"La génération SlidesGPT a échoué : {data}")
 
     # Lien web reconstruit à partir de l'ID, vu dans l'interface SlidesGPT
-    # ("Récents") une fois connecté. NON documenté par l'API officielle :
-    # expérimental, peut ne pas fonctionner hors session ou casser sans préavis.
+    # ("Récents") une fois connecté. Non documenté par l'API officielle,
+    # mais confirmé fonctionnel (y compris pour des tiers sans session active).
     web_url = f"https://slidesgpt.com/presentation/{presentation_id}" if presentation_id else ""
 
     return {
         "gammaUrl": web_url or embed_url,  # clé conservée pour compatibilité avec main.py / history.py
-        "embedUrl": embed_url,
-        "downloadUrl": download_url,
         "presentationId": presentation_id,
     }

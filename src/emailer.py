@@ -23,8 +23,6 @@ def send_veille_email(
     count: int,
     presentation_url: str,
     run_date: str,
-    embed_url: str = "",
-    download_url: str = "",
 ) -> None:
     """
     Envoie un email récapitulatif de la veille effectuée.
@@ -32,13 +30,8 @@ def send_veille_email(
     Args:
         topic: Sujet de la veille.
         count: Nombre d'actus retenues.
-        presentation_url: Lien principal vers la présentation (le lien web
-            slidesgpt.com/presentation/{id}, expérimental et non garanti).
+        presentation_url: Lien vers la présentation (slidesgpt.com/presentation/{id}).
         run_date: Date de la veille (format libre, ex: "16/11/2026").
-        embed_url: Lien officiel d'aperçu (Microsoft PowerPoint Online),
-            fourni en secours si le lien principal ne fonctionne pas.
-        download_url: Lien officiel de téléchargement direct du .pptx,
-            fourni en secours si le lien principal ne fonctionne pas.
 
     Raises:
         RuntimeError: si les variables d'environnement nécessaires sont
@@ -66,25 +59,17 @@ def send_veille_email(
 
     subject = f"Veille {topic} – {run_date}"
 
-    lines = [
-        "Bonjour,",
-        "",
-        f"Ta veille quotidienne sur « {topic} » est prête.",
-        "",
-        f"{count} actualité(s) retenue(s)",
-        f"Présentation : {presentation_url}",
-    ]
-    if embed_url:
-        lines.append(f"Aperçu (secours) : {embed_url}")
-    if download_url:
-        lines.append(f"Téléchargement direct .pptx (secours) : {download_url}")
-    lines += ["", "Généré automatiquement par veille-ia-gamma"]
-
-    body = "\n".join(lines)
+    body = (
+        f"Bonjour,\n\n"
+        f"Ta veille quotidienne sur « {topic} » est prête.\n\n"
+        f"{count} actualité(s) retenue(s)\n"
+        f"Présentation : {presentation_url}\n\n"
+        f"Généré automatiquement par veille-ia-auto"
+    )
 
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
-    msg["From"] = sender
+    msg["From"] = f"veille-ia-auto <{sender}>"
     msg["To"] = recipient
 
     try:

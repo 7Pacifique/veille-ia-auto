@@ -21,8 +21,8 @@ Automatise ta veille quotidienne : recherche les actualités les plus récentes 
 ## Installation
 
 ```bash
-git clone https://github.com/7Pacifique/veille-ia-gamma.git
-cd veille-ia-gamma
+git clone https://github.com/7Pacifique/veille-ia-auto.git
+cd veille-ia-auto
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -82,7 +82,7 @@ python main.py "IA Afrique de l'Ouest" --hours 48 --max 10
 ## Structure du projet
 
 ```
-veille-ia-gamma/
+veille-ia-auto/
 ├── main.py                      # Point d'entrée (CLI)
 ├── src/
 │   ├── news_fetcher.py          # Récupération des actus (Google News RSS)
@@ -133,14 +133,11 @@ Bénin), sur les serveurs de GitHub – ton PC n'a pas besoin d'être allumé.
 Pour changer le sujet ou l'horaire, modifie directement les champs `cron`
 et la commande `python main.py "..."` dans le fichier du workflow.
 
-> **Note sur le lien principal envoyé par email :** il s'agit du lien
+> **Note sur le lien envoyé par email :** il s'agit du lien
 > `slidesgpt.com/presentation/{id}`, reconstruit à partir de l'identifiant
-> renvoyé par l'API. Ce lien n'est pas documenté officiellement par SlidesGPT
-> et n'est donc pas garanti (il peut dépendre d'une session active, ou cesser
-> de fonctionner si SlidesGPT change son interface). Deux liens de secours,
-> officiels et garantis par l'API, sont toujours inclus dans l'email :
-> un aperçu via Microsoft PowerPoint Online, et un téléchargement direct du
-> fichier `.pptx`.
+> renvoyé par l'API. Ce lien n'est pas documenté officiellement par
+> SlidesGPT, mais s'est révélé fiable à l'usage, y compris pour des tiers
+> sans session active sur le compte SlidesGPT.
 
 > **Note sur un changement de fournisseur futur :** si tu changes à nouveau
 > de service de génération de présentation, seul le fichier
