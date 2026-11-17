@@ -26,7 +26,7 @@ def _save(entries: list[dict]) -> None:
         json.dump(entries, f, ensure_ascii=False, indent=2)
 
 
-def add_entry(topic: str, count: int, gamma_url: str, run_date: date | None = None) -> None:
+def add_entry(topic: str, count: int, slidesgpt_url: str, run_date: date | None = None) -> None:
     """Ajoute une veille à l'historique et sauvegarde le fichier."""
     run_date = run_date or date.today()
     entries = _load()
@@ -35,7 +35,7 @@ def add_entry(topic: str, count: int, gamma_url: str, run_date: date | None = No
             "date": run_date.isoformat(),
             "topic": topic,
             "count": count,
-            "gamma_url": gamma_url,
+            "slidesgpt_url": slidesgpt_url,
             "created_at": datetime.now().isoformat(),
         }
     )
